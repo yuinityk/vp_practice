@@ -12,7 +12,9 @@ def decompose_partial(files,n):
     inp_names = [('./input/' + files[i]) for i in range(len(files))]
     mix = [wav.read(inp_names[i])[1] for i in range(len(files))]
     
-    S = np.c_[mix[:n]] #先頭n個のみを用いる
+    S = np.c_[mix[0]]
+    for i in range(1,n):
+        S = np.c_[S, mix[i]]
     S = S.astype(np.float64)
     S /= S.std(axis = 0)
 
