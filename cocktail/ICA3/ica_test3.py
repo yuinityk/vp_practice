@@ -6,20 +6,25 @@ from sklearn.decomposition import FastICA
 RATE =  44100
 np.random.seed(0)
 
-mix1 = wav.read('input1.wav')[1]
-mix2 = wav.read('input2.wav')[1]
-mix3 = wav.read('input3.wav')[1]
-mix4 = wav.read('input4.wav')[1]
+#input voice data
+input1 = wav.read('input1.wav')[1]
+input2 = wav.read('input2.wav')[1]
+input3 = wav.read('input3.wav')[1]
+#noise voice data
+noise1 = wav.read('noise1.wav')[1]
+noise2 = wav.read('noise2.wav')[1]
+noise3 = wav.read('noise3.wav')[1]
 
-S = np.c_[mix1[0:430000],mix2[0:430000],mix3[0:430000],mix4[0:430000]]
+S = np.c_[input1[0:430000],input2[0:430000],input3[0:430000],noise1[0:430000],noise2[0:430000],noise3[0:430000]]
 S = S.astype(np.float64)
-S += 5000*np.random.normal(size=S.shape)
 S /= S.std(axis = 0)
 
-A=np.array([[1.0,1.0,1.0,-0.5],[1.0,1.0,-1.0,0.5],[1.0,-1.0,1.0,0.5]])
+#mix matrix
+A=np.array([[1.0,1.0,-1.0,-0.1,0.2,0.2],[1.0,-1.0,1.0,0.2,-0.1,0.2],[-1.0,1.0,1.0,0.2,0.2,-0.1]])
+#mixed voice data
 S=np.dot(S,A.T)
 
-names = ['mix4_1', 'mix4_2', 'mix4_3']
+names = ['mix1', 'mix2', 'mix3']
 
 filenames = [(names[i] + '.wav') for i in range(3)]
 for i in range(3):
@@ -27,16 +32,13 @@ for i in range(3):
 
 ica = FastICA(n_components=3)
 S_ = ica.fit_transform(S)
-S_100 = S_ * 300
+#volume up
+S_100 = S_ * 100
 
 
 names = ['output1', 'output2', 'output3']
 
 filenames = [(names[i] + '.wav') for i in range(3)]
-for i in range(3):
-    wav.write(filenames[i],RATE,S_[:,i])
-
-filenames = [(names[i] + '_100.wav') for i in range(3)]
 for i in range(3):
     wav.write(filenames[i],RATE,S_100[:,i])
 
