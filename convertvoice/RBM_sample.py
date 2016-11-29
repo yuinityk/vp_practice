@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+from sklearn.datasets import fetch_mldata
+import matplotlib.pyplot as plt
 
 def sigmoid(x):
     return 1. / (1 + np.exp(-x))
@@ -65,15 +67,47 @@ class RBM(object):
         sRecon = self.np_rng.binomial(size=mRecon.shape, n=1, p=mRecon)
         return mRecon, sRecon
 
+class GBRBM(RBM):
+    def __init__(self, input, n_visible, n_hidden, np_rng):
+        self.n_visible = n_visible
+        self.n_hidden = n_hidden
 
-data = np.array([[1,1,1,0,0,0],
-                 [0,0,1,1,0,0],
-                 [0,0,0,1,1,1]])
+        a = 1. / n_visible
+        self.W = np.array(np_rng.uniform(low=-a, high=a, size=(n_visible, n_hidden)))
+
+        self.np_rng = np_rng
+        self.input = input
+        self.hbias = np.zeros(n_hidden)
+        self.vbias = np.zeros(n_visible)
+        self.var = np.ones(n_visible) #
+
+    def cd(self, eta=0.1, k=1):
+        ph_mean, ph_sample = self.sample_h(self.input)
+        chain_start = ph_sample
+
+        for step in range(k):
+            if step == 0:
+                nv_means, nv_samples, nh_means, nh_samples = self.gibbs_samp(chain_start)
+            else:
+                nv_means, nv_samples, nh_means, nh_samples = self.gibbs_samp(nh_samples)
+
+                #############
+                self.W += eta * ()
+
+    def sample_v(self,v0_sample):
+        pass
+    
+
+mnist = fetch_mldata('MNIST original', data_home=".")
+thre = 200
+data = mnist.data > thre
+d_learn = data[:10000].astype(int)
+d_test = data[10000:12000].astype(int)
 
 rbm = RBM(input=data, n_visible=len(data[0]), n_hidden=4, np_rng=np.random.RandomState(123))
 
 # train
-training_epochs=1000
+training_epochs=100
 learning_rate=0.1
 k=1
 for epoch in range(training_epochs):
@@ -81,9 +115,9 @@ for epoch in range(training_epochs):
     cost = rbm.get_cross_entropy()
     print 'Training epoch: %d, cost: ' % epoch, cost
 
-test = np.array([[0,0,1,1,1,1],
-                 [1,1,0,1,0,0],
-                 [0,0,1,1,1,0],
-                 [1,0,1,1,0,0]])
-mRecon, sRecon = rbm.reconstruct(test)
-print sRecon
+mRecon, sRecon = rbm.reconstruct(d_test)
+#print sRecon
+
+plt.figure()
+plt.imshow(sRecon[0].reshape(28,28), cmap=plt.cm.gray_r, interpolation="nearest")
+plt.show()
