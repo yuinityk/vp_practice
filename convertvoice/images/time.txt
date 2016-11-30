@@ -1,0 +1,1 @@
+data 1000, epoch 10000, hidden 40 : 2682s

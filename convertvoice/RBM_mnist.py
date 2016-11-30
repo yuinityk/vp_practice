@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
+import sys
 import numpy as np
 from sklearn.datasets import fetch_mldata
+import matplotlib.pyplot as plt
 
 def sigmoid(x):
     return 1. / (1 + np.exp(-x))
@@ -96,30 +98,50 @@ class GBRBM(RBM):
 
     def sample_v(self,v0_sample):
         pass
-    
 
-data = np.array([[0,0,1,1,0,0,0,0,1,1,0],
-                 [1,1,1,0,0,0,1,1,1,1,1],
-                 [0,0,0,1,1,1,1,0,0,0,0]])
-rbm = RBM(input=data, n_visible=len(data[0]), n_hidden=500, np_rng=np.random.RandomState(123))
+mnist = fetch_mldata('MNIST original', data_home=".")
+thre = 200
+data = mnist.data > thre
+np.random.seed(1)
+d_learn = data[:60000].astype(int)
+np.random.shuffle(d_learn)
+d_learn = d_learn[:1000].astype(int)
+d_test = data[60000:70000].astype(int)
+np.random.shuffle(d_test)
+
+
+rbm = RBM(input=d_learn,n_visible=len(d_learn[0]), n_hidden=40, np_rng=np.random.RandomState(123))
 # train
-training_epochs=1000
-learning_rate=0.1
+training_epochs=10000
+learning_rate=0.02441
 k=1
+st = time.time()
 
 for epoch in range(training_epochs):
     rbm.cd(eta=learning_rate, k=k)
     cost = rbm.get_cross_entropy()
-    print 'Training epoch: %d, cost: ' % epoch, 10000*cost
+    print 'Training epoch: %d, cost: ' % epoch, cost
+print time.time()-st
+mRecon, sRecon = rbm.reconstruct(d_test)
 
-d_learn = np.array([[0,1,0,1,1,1,0,0,0,0,0],
-                    [1,1,0,0,0,0,1,1,0,1,0]])
+for i in range(25):
+    plt.subplot(5,5,i+1)
+    plt.imshow(rbm.W.T[i].reshape(28,28), cmap=plt.cm.gray_r, interpolation="nearest")
+plt.show()
+
+for i in range(50):
+    plt.subplot(10,5,i+1)
+    if i<25:
+        plt.imshow(d_test[i].reshape(28,28), cmap=plt.cm.gray_r, interpolation="nearest")
+    else:
+        plt.imshow(sRecon[i-25].reshape(28,28), cmap=plt.cm.gray_r, interpolation="nearest")
+plt.show()
 
 mRecon, sRecon = rbm.reconstruct(d_learn)
-print data
-print "-----------"
-print d_learn
-print "-----------"
-print sRecon
-print (rbm.vbias / rbm.vbias.min()).astype(int)
-
+for i in range(50):
+    plt.subplot(10,5,i+1)
+    if i<25:
+        plt.imshow(d_learn[i].reshape(28,28), cmap=plt.cm.gray_r, interpolation="nearest")
+    else:
+        plt.imshow(sRecon[i-25].reshape(28,28), cmap=plt.cm.gray_r, interpolation="nearest")
+plt.show()
