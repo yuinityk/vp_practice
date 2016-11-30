@@ -105,14 +105,14 @@ data = mnist.data > thre
 np.random.seed(1)
 d_learn = data[:60000].astype(int)
 np.random.shuffle(d_learn)
-d_learn = d_learn[:1000].astype(int)
+d_learn = d_learn[:50].astype(int)
 d_test = data[60000:70000].astype(int)
 np.random.shuffle(d_test)
 
 
-rbm = RBM(input=d_learn,n_visible=len(d_learn[0]), n_hidden=40, np_rng=np.random.RandomState(123))
+rbm = RBM(input=d_learn,n_visible=len(d_learn[0]), n_hidden=500, np_rng=np.random.RandomState(123))
 # train
-training_epochs=10000
+training_epochs=1000
 learning_rate=0.02441
 k=1
 st = time.time()
