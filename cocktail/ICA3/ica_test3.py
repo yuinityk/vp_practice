@@ -24,21 +24,31 @@ A=np.array([[1.0,1.0,-1.0,-0.1,0.2,0.2],[1.0,-1.0,1.0,0.2,-0.1,0.2],[-1.0,1.0,1.
 #mixed voice data
 S=np.dot(S,A.T)
 
+
+ica = FastICA(n_components=3)
+S_ = ica.fit_transform(S)
+
+
+
+#volume up = normalization
+S = S/np.max(S)*32767
+S = S.astype(np.int16)
+
 names = ['mix1', 'mix2', 'mix3']
 
 filenames = [(names[i] + '.wav') for i in range(3)]
 for i in range(3):
     wav.write(filenames[i],RATE,S[:,i])
 
-ica = FastICA(n_components=3)
-S_ = ica.fit_transform(S)
-#volume up
-S_100 = S_ * 100
+
+#volume up = normalization
+S_ = S_/np.max(S_)*32767
+S_ = S_.astype(np.int16)
 
 
 names = ['output1', 'output2', 'output3']
 
 filenames = [(names[i] + '.wav') for i in range(3)]
 for i in range(3):
-    wav.write(filenames[i],RATE,S_100[:,i])
+    wav.write(filenames[i],RATE,S_[:,i])
 
