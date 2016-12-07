@@ -31,7 +31,7 @@ S_ = ica.fit_transform(S)
 
 
 #volume up = normalization
-S = S/np.max(S)*32767
+S = S/np.max(np.abs(S))*32767
 S = S.astype(np.int16)
 
 names = ['mix1', 'mix2', 'mix3']
@@ -42,7 +42,7 @@ for i in range(3):
 
 
 #volume up = normalization
-S_ = S_/np.max(S_)*32767
+S_ = S_/np.max(np.abs(S_))*32767
 S_ = S_.astype(np.int16)
 
 
