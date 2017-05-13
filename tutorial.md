@@ -4,7 +4,7 @@
 PC:1台  
 マイク:1本  
 *音を鳴らすものが用意できるとよい*  
-## spectle visualizer  
+## SpetrumAnalyzer  
 PC:SoundSpringと同じもの  
 ## ICA  
 not implemented
@@ -19,7 +19,7 @@ PC:2台
 小田倉の作った説明を貼っておく．  
 たまにチャープなどを流す．  
 ポスター解説:音の基礎  
-## spectle visualizer  
+## SpetrumAnalyzer  
 見させる.ちょっと解説．  
 ポスター解説:音の基礎  
 ## 曲当て  
@@ -35,11 +35,11 @@ PC:2台
 ## 環境整備  
 + SoundSpring→pyaudio,PyGame,numpy  
 + 音当て→pyaudio,PyQt4,scikit-learn,scipy,numpy  
-+ spectle visualizer→pyaudio,numpy,pyqtgraph(pipから)  
++ SpetrumAnalyzer→pyaudio,numpy,pyqtgraph(pipから)  
 + しりとり→PyQt5,MeCab,pyaudio,sox  
 ## プログラムの使い方の説明  
 + SoundSpring→起動するだけ  
-+ spectle visualizer→起動するだけ  
++ SpetrumAnalyzer→起動するだけ  
 + 曲当て→操作方法の紙  
 + しりとり→操作方法の紙  
 ## 理論冊子/ポスターの内容の説明  
@@ -49,12 +49,12 @@ PC:2台
 久保，八嶋  
 ## 説明担当  
 + SoundSpring:久保  
-+ spectle visualizer:八嶋  
++ SpetrumAnalyzer:八嶋  
 + 曲当て:八嶋  
 + しりとり:久保  
 ## 進め方  
 それぞれの展示が独立しているのでそれぞれの説明をする．  
-SoundSpring,spectle visualizer,曲当て，しりとりの順．  
+SoundSpring,SpetrumAnalyzer,曲当て，しりとりの順．  
 ## 説明スクリプト  
 ### SoundSpring  
 音を入れると音の高さ，大きさに応じてボールが湧き出します．  
@@ -65,12 +65,12 @@ SoundSpringではオクターブが違う音は色の明るさの違いで表さ
 次にチャープ信号という，高さが連続的に変わる音を入れてみます． 
 音の高さは色の色相に対応していて，このように虹色のボールが出てきます．  
 もちろん同じことが声でもできるので，試してみてください．  
-### spectle visualizer  
+### SpetrumAnalyzer  
 こちらは音を入れると周波数スペクトルが表示されます．  
 周波数とは高さを表していて，どの高さの音がどのくらい含まれるかを表したのが周波数スペクトルです．  
 (お客さんによっては説明)周波数スペクトルが何かをちゃんと説明→音の信号をフーリエ変換したものです．フーリエ変換は三角波の合成．  
 画面上では両対数表示している．  
-### SoundSpring & spectle visualizer(本番)  
+### SoundSpring & SpetrumAnalyzer(本番)  
 音を入れると音の高さ，大きさに応じてボールが湧き出します． 
 こちらではそのときの音に，どの高さの音がどのくらい含まれるかを表しています．
 まず，440Hzのラの音を入れてみると，こんな感じになります．  
@@ -108,7 +108,7 @@ mei以外の4人の声は，久保さんの声を変換することによって�
 ## SoundSpring  
 + 高さの取り出し方  
 高さは音にフーリエ変換という変換を施すことで取り出しています．フーリエ変換すると，どの高さの音がどのくらいの割合を占めているかというのが得られるので，それに応じてボールを湧き出させています．  
-## spectle visualizer  
+## SpetrumAnalyzer  
 + 軸について  
 画面上では両対数表示しています．縦方向は単純にそのほうが見やすいからです．  
 横方向はつまり周波数を対数表示しているということになりますが，人間は周波数の関係を対数的に捉えています．  
